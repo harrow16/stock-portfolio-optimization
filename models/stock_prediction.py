@@ -34,9 +34,6 @@ class StockPredictor:
         self.df['Date'] = pd.to_datetime(self.df['Date'])
         self.df = self.df.sort_values(['Ticker', 'Date']).reset_index(drop=True)
         
-        # MinLotSizeカラムを追加（要件では100固定）
-        self.df['MinLotSize'] = 100
-        
         print(f"データ読み込み完了: {len(self.df)}行, {len(self.df['Ticker'].unique())}銘柄")
         print(f"期間: {self.df['Date'].min()} ～ {self.df['Date'].max()}")
         
@@ -187,7 +184,6 @@ class StockPredictor:
             'Current_Price': prediction_df['Close'].values,
             'Predicted_Return': predictions,
             'Sector': prediction_df['Sector'].values,
-            'MinLotSize': prediction_df['MinLotSize'].values,
             'Name': prediction_df['Name'].values
         })
         

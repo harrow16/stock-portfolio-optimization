@@ -15,7 +15,6 @@ tuple Stock {
     float Current_Price;     // 現在の株価
     float Predicted_Return;  // 予測収益率
     string Sector;           // 業界
-    int MinLotSize;          // 最小単元（100固定）
     string Name;             // 企業名
 }
 
@@ -24,6 +23,7 @@ tuple Stock {
 float Budget = 1000000;                  // 予算（100万円）
 float CommissionRate = 0.001;            // 手数料率（0.1%）
 int MaxStocks = 5;                       // 最大銘柄数
+int LotSize = 100;                       // 購入単位（100株固定）
 {string} Sectors = {s.Sector | s in Stocks};  // 業界の集合
 
 // 決定変数
@@ -32,9 +32,9 @@ dvar boolean selected[Stocks];           // 銘柄を選択するか（0 or 1）
 
 // 目的関数: 期待収益を最大化
 // 期待収益 = Σ(株価 × 収益率 × 購入株数) - 手数料
-dexpr float TotalInvestment = sum(s in Stocks) s.Current_Price * units[s] * s.MinLotSize;
+dexpr float TotalInvestment = sum(s in Stocks) s.Current_Price * units[s] * LotSize;
 dexpr float Commission = TotalInvestment * CommissionRate;
-dexpr float ExpectedReturn = sum(s in Stocks) s.Current_Price * s.Predicted_Return * units[s] * s.MinLotSize;
+dexpr float ExpectedReturn = sum(s in Stocks) s.Current_Price * s.Predicted_Return * units[s] * LotSize;
 dexpr float NetReturn = ExpectedReturn - Commission;
 
 maximize NetReturn;
@@ -85,7 +85,7 @@ execute DISPLAY {
     var rank = 1;
     for(var s in Stocks) {
         if(selected[s] == 1) {
-            var shares = units[s] * s.MinLotSize;
+            var shares = units[s] * LotSize;
             var cost = s.Current_Price * shares;
             var expectedProfit = cost * s.Predicted_Return;
             totalCost += cost;
