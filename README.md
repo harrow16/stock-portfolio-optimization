@@ -58,7 +58,7 @@ C:/Bob/20260420/
 
 1. **リポジトリのクローン**
 ```bash
-git clone https://github.com/yourusername/stock-portfolio-optimization.git
+git clone https://github.com/harrow16/stock-portfolio-optimization.git
 cd stock-portfolio-optimization
 ```
 
